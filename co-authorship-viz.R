@@ -13,15 +13,21 @@ coauthor_graph <- coauthor_df %>%
   rename(author1 = Name) %>%
   graph_from_data_frame()
 
-coauthor_graph %>%
+coauthor_plot <- coauthor_graph %>%
   ggraph(layout = "auto") +
   geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "cyan4") +
-  geom_node_point(size = 5) +
+  scale_edge_alpha(range = c(0.15, 1)) +
+  scale_edge_width(range = c(1, 4)) +
+  geom_node_point(size = 3, color = "grey10") +
   geom_node_text(aes(label = name),
     repel = TRUE,
+    size = 5,
     point.padding = unit(0.2, "lines")
   ) +
-  theme_void()
+  theme_void() +
+  theme(legend.position = "bottom")
+
+ggsave("coauthor-plot.png", coauthor_plot, height = 5.5, width = 8)
 
 igraph_layouts <- c("dh", "fr", "kk", "stress")
 
